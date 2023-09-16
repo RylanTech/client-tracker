@@ -6,7 +6,7 @@ export class gig extends Model<InferAttributes<gig>, InferCreationAttributes<gig
     declare userId: number;
     declare gigName: string;
     declare gigValue: number;
-    declare gigCost: string;
+    declare gigCost: number;
     declare gigFeatures: string;
     declare gigTimeSpent: number;
 }
@@ -20,11 +20,11 @@ export function gigFactory(sequelize: Sequelize) {
             allowNull: false
         },
         clientId: {
-            type: DataTypes.NUMBER,
+            type: DataTypes.INTEGER,
             allowNull: true,
         },
         userId: {
-            type: DataTypes.NUMBER,
+            type: DataTypes.INTEGER,
             allowNull: true,
         },
         gigName: {
@@ -32,11 +32,11 @@ export function gigFactory(sequelize: Sequelize) {
             allowNull: false,
         },
         gigValue: {
-            type: DataTypes.NUMBER,
+            type: DataTypes.INTEGER,
             allowNull: false,
         },
         gigCost: {
-            type: DataTypes.NUMBER,
+            type: DataTypes.INTEGER,
             allowNull: false,
         },
         gigFeatures: {
@@ -44,7 +44,7 @@ export function gigFactory(sequelize: Sequelize) {
             allowNull: false,
         },
         gigTimeSpent: {
-            type: DataTypes.NUMBER,
+            type: DataTypes.INTEGER,
             allowNull: false,
         },
     },

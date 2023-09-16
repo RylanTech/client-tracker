@@ -29,17 +29,20 @@ exports.getallUsers = getallUsers;
 const createUser = async (req, res, next) => {
     try {
         let newUser = req.body;
-        if (newUser.username && newUser.password) {
+        if (newUser.email && newUser.password) {
             let hashedPassword = await (0, auth_1.hashPassword)(newUser.password);
             newUser.password = hashedPassword;
+            newUser.value = 0;
+            newUser.spent = 0;
             let created = await user_1.user.create(newUser);
+            console.log(created);
             res.status(201).json({
-                username: created.username,
+                email: created.email,
                 userId: created.userId
             });
         }
         else {
-            res.status(400).send('Username and password required');
+            res.status(400).send('email and password required');
         }
     }
     catch {
@@ -49,10 +52,10 @@ const createUser = async (req, res, next) => {
 exports.createUser = createUser;
 const loginUser = async (req, res, next) => {
     try {
-        // Look up user by their username
+        // Look up user by their email
         console.log(req.body);
         let existingUser = await user_1.user.findOne({
-            where: { username: req.body.username }
+            where: { email: req.body.email }
         });
         // If user exists, check that password matches
         if (existingUser) {
@@ -67,7 +70,7 @@ const loginUser = async (req, res, next) => {
             }
         }
         else {
-            res.status(401).json('Invalid username');
+            res.status(401).json('Invalid email');
         }
     }
     catch {

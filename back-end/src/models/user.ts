@@ -27,16 +27,16 @@ export function userFactory(sequelize: Sequelize) {
             allowNull: false,
         },
         value: {
-            type: DataTypes.NUMBER,
+            type: DataTypes.INTEGER,
             allowNull: false,
         },
         spent: {
-            type: DataTypes.NUMBER,
+            type: DataTypes.INTEGER,
             allowNull: false,
         },
         clientIds: {
-            type: DataTypes.STRING,
-            allowNull: false,
+            type: DataTypes.JSON,
+            allowNull: true,
         }
     },
         {

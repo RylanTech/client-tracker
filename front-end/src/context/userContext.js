@@ -6,8 +6,8 @@ let baseUrl = "http://localhost:3001/"
 
 export const UserProvider = (props) => {
   
-  function signInUser(username, password) {
-    let user = { username, password };
+  function signInUser(email, password) {
+    let user = { email, password };
 
     return axios.post(baseUrl + "api/user/signin", user)
       .then(response => {
@@ -17,8 +17,8 @@ export const UserProvider = (props) => {
       );
   }
 
-  function createUser(username, password) {
-    let user = { username, password };
+  function createUser(email, password) {
+    let user = { email, password };
 
     return axios.post(baseUrl + "api/user/", user)
       .then(response => {

@@ -28,10 +28,14 @@ export const getallUsers: RequestHandler = async (req, res, next) => {
 export const createUser: RequestHandler = async (req, res, next) => {
     try {
         let newUser: user = req.body;
+
         if (newUser.email && newUser.password) {
             let hashedPassword = await hashPassword(newUser.password);
             newUser.password = hashedPassword;
+            newUser.value = 0
+            newUser.spent = 0
             let created = await user.create(newUser);
+            console.log(created)
             res.status(201).json({
                 email: created.email,
                 userId: created.userId

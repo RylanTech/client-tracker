@@ -13,7 +13,7 @@ function userFactory(sequelize) {
             primaryKey: true,
             allowNull: false
         },
-        username: {
+        email: {
             type: sequelize_1.DataTypes.STRING,
             unique: true,
             allowNull: false,
@@ -21,6 +21,18 @@ function userFactory(sequelize) {
         password: {
             type: sequelize_1.DataTypes.STRING,
             allowNull: false,
+        },
+        value: {
+            type: sequelize_1.DataTypes.INTEGER,
+            allowNull: false,
+        },
+        spent: {
+            type: sequelize_1.DataTypes.INTEGER,
+            allowNull: false,
+        },
+        clientIds: {
+            type: sequelize_1.DataTypes.JSON,
+            allowNull: true,
         }
     }, {
         freezeTableName: true,

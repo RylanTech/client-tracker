@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import { db } from './models';
 import { verify } from './controllers/userController';
 import userRoutes from './routes/userRoutes'
+import clientRoutes from './routes/clientRoutes'
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(cors());
 
 // Routing Middleware
 app.use('/api/user/', userRoutes)
+app.use('/api/client/', clientRoutes)
 app.use('/api/verify', verify);
 
 

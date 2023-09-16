@@ -5,6 +5,7 @@ export class client extends Model<InferAttributes<client>, InferCreationAttribut
     declare name: string;
     declare email: string;
     declare imageUrl: string;
+    declare clientValue: number;
     declare userId: number;
 }
 
@@ -19,7 +20,7 @@ export function clientFactory(sequelize: Sequelize) {
         email: {
             type: DataTypes.STRING,
             unique: true,
-            allowNull: false,
+            allowNull: true,
         },
         name: {
             type: DataTypes.STRING,
@@ -29,8 +30,12 @@ export function clientFactory(sequelize: Sequelize) {
             type: DataTypes.STRING,
             allowNull: true,
         },
+        clientValue: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
         userId: {
-            type: DataTypes.NUMBER,
+            type: DataTypes.INTEGER,
             allowNull: false
         },
     },

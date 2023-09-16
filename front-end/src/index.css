@@ -1,0 +1,11 @@
+.clientImg {
+    border-radius: 40px;
+    aspect-ratio: 4/5;
+}
+.personLink {
+    text-decoration: none;
+}
+.personLink:hover .card {
+    padding: -8px!important;
+    margin: -8px!important;
+}
