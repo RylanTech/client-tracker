@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import { verifyUser } from "../services/authService";
 import { client } from "../models/clients";
 import { user } from "../models/user";
+import { Op, Sequelize } from "sequelize";
 
 export const getClients: RequestHandler = async (req, res, next) => {
     let usr = await verifyUser(req)
@@ -87,6 +88,32 @@ export const addClient: RequestHandler = async (req, res, next) => {
         console.error(error);
         return res.status(500).send();
     }
+}
+
+export const searchClient: RequestHandler = async (req, res, next) => {
+    let usr = await verifyUser(req)
+
+    try {
+        if (usr) {
+            const { query } = req.params;
+
+            let searchResults = await client.findAll({
+                where: {
+                    [Op.or]: [
+                        Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), 'LIKE', `%${query.toLowerCase()}%`),
+                        Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('email')), 'LIKE', `%${query.toLowerCase()}%`),
+                    ]
+                }
+
+            });
+            res.json(searchResults);
+        } else {
+            res.status(401).send()
+        }
+
+    } catch {
+    res.status(500).send()
+}
 }
 
 export const removeClient: RequestHandler = async (req, res, next) => {

@@ -16,7 +16,7 @@ function Clients() {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const { addClient, getClients } = useContext(ClientContext)
+    const { addClient, getClients, searchClients } = useContext(ClientContext)
 
     useEffect(() => {
         async function getCli() {
@@ -24,7 +24,7 @@ function Clients() {
             setClients(cli)
         }
         getCli()
-    },[])
+    }, [])
 
     useEffect(() => {
 
@@ -40,7 +40,7 @@ function Clients() {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
-    
+
     function addaClient() {
         const client = {
             name: name,
@@ -49,6 +49,19 @@ function Clients() {
         }
         console.log(client)
         addClient(client)
+    }
+
+    async function search(value) {
+        if (value === "") {
+            async function getCli() {
+                const cli = await getClients()
+                setClients(cli)
+            }
+            getCli()
+        } else {
+            let cli = await searchClients(value)
+            setClients(cli)
+        }
     }
 
     function mapClients() {
@@ -61,24 +74,24 @@ function Clients() {
                     <>
                         <div className="col-12 col-sm-6">
                             <Link className="personLink" to={`/client/${client.clientId}`}>
-                            <Card>
-                                <Card.Header>
-                                    <Row>
-                                        <center>
-                                            <img
-                                                className="col-8 clientImg"
-                                                src={client.imageUrl}
-                                            />
-                                        </center>
-                                    </Row>
-                                </Card.Header>
-                                <Card.Body>
-                                    <h3>{client.name}</h3>
-                                    {client.email}
-                                </Card.Body>
-                            </Card>
+                                <Card>
+                                    <Card.Header>
+                                        <Row>
+                                            <center>
+                                                <img
+                                                    className="col-8 clientImg"
+                                                    src={client.imageUrl}
+                                                />
+                                            </center>
+                                        </Row>
+                                    </Card.Header>
+                                    <Card.Body>
+                                        <h3>{client.name}</h3>
+                                        {client.email}
+                                    </Card.Body>
+                                </Card>
                             </Link>
-                            <br/>
+                            <br />
                         </div>
                     </>
                 )
@@ -101,7 +114,7 @@ function Clients() {
                         <div className="col-8">
                             <Form.Control
                                 placeholder="Search for a Client"
-                                onChange={(e) => setQuery(e.target.value)}
+                                onChange={(e) => search(e.target.value)}
                             />
                         </div>
                     </Row>
@@ -115,7 +128,7 @@ function Clients() {
                         <div className="col-12">
                             <Form.Control
                                 placeholder="Search for a Client"
-                                onChange={(e) => setQuery(e.target.value)}
+                                onChange={(e) => search(e.target.value)}
                             />
                             <br />
                         </div>
@@ -151,19 +164,19 @@ function Clients() {
                             <Form.Group className="col-5">
                                 <Form.Label>Name</Form.Label>
                                 <Form.Control
-                                onChange={(e) => setName(e.target.value)}
+                                    onChange={(e) => setName(e.target.value)}
                                 />
                             </Form.Group>
                             <Form.Group className="col-7">
                                 <Form.Label>Email</Form.Label>
                                 <Form.Control
-                                onChange={(e) => setEmail(e.target.value)}
+                                    onChange={(e) => setEmail(e.target.value)}
                                 />
                             </Form.Group>
                             <Form.Group className="col-12">
                                 <Form.Label>imageUrl</Form.Label>
                                 <Form.Control
-                                onChange={(e) => setImageUrl(e.target.value)}
+                                    onChange={(e) => setImageUrl(e.target.value)}
                                 />
                             </Form.Group>
                         </Row>
@@ -173,15 +186,15 @@ function Clients() {
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button 
-                    variant="primary"
-                    onClick={async () => {
-                        addaClient()
-                        handleClose()
-                        window.location.reload()
-                    }}
+                    <Button
+                        variant="primary"
+                        onClick={async () => {
+                            addaClient()
+                            handleClose()
+                            window.location.reload()
+                        }}
                     >
-                    Add
+                        Add
                     </Button>
                 </Modal.Footer>
             </Modal>

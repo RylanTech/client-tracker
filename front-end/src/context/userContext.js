@@ -2,7 +2,8 @@ import axios from "axios";
 import { createContext } from "react";
 
 export const UserContext = createContext()
-let baseUrl = "http://localhost:3001/"
+// let baseUrl = "http://localhost:3001/"
+let baseUrl = "http://192.168.1.2:3001/"
 
 export const UserProvider = (props) => {
   
