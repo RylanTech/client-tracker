@@ -24,3 +24,23 @@
 .btntxt {
     margin:auto;
 }
+
+.gigItem {
+    border: 1.4px solid rgb(83, 83, 83);
+    margin-top: 2px;
+    padding-top: 8px;
+    border-radius: 5px;
+    background-color: rgb(235, 235, 235);
+}
+
+.clientCard {
+    position: absolute;
+    border: 1px solid black;
+    padding: 5px 10px 5px 5px;
+    background-color: aliceblue;
+    border-radius: 5px;
+}
+
+.clientCard:hover {
+    background-color: rgb(220, 226, 230);
+}

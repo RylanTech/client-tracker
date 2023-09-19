@@ -113,8 +113,8 @@ export const searchClient: RequestHandler = async (req, res, next) => {
         }
 
     } catch {
-    res.status(500).send()
-}
+        res.status(500).send()
+    }
 }
 
 export const removeClient: RequestHandler = async (req, res, next) => {
@@ -130,7 +130,21 @@ export const removeClient: RequestHandler = async (req, res, next) => {
             if (!id) {
                 res.status(400).send()
             }
-            await client.destroy({ where: { clientId: reqRemove } })
+
+            const updatedUser = await user.findByPk(usr.userId);
+
+            if (updatedUser) {
+                const updatedClientIds = clientIds.filter(id => id !== parseInt(reqRemove));
+                // Assuming usr is a Sequelize model, update the clientIds property
+
+                console.log(updatedClientIds)
+
+                await updatedUser.update({ clientIds: JSON.stringify(updatedClientIds) });
+
+                await client.destroy({ where: { clientId: reqRemove } })
+            } else {
+                res.status(500).send()
+            }
         } catch {
             res.status(500).send()
         }

@@ -49,7 +49,6 @@ function Clients() {
             imageUrl: imageUrl,
             number: number
         }
-        console.log(client)
         addClient(client)
     }
 
@@ -69,15 +68,14 @@ function Clients() {
     function mapClients() {
         if (clients) {
             return clients.map((client) => {
-                if (!client.imageUrl) {
-                    client.imageUrl = "https://cse.umn.edu/sites/cse.umn.edu/themes/custom/cse/img/person_placeholder.png"
-                }
+                
                 return (
                     <>
                         <div className="col-12 col-sm-6">
                             <Link className="personLink" to={`/client/${client.clientId}`}>
                                 <Card>
-                                    <Card.Header>
+                                    {client.imageUrl ? (
+                                        <Card.Header>
                                         <Row>
                                             <center>
                                                 <img
@@ -87,6 +85,9 @@ function Clients() {
                                             </center>
                                         </Row>
                                     </Card.Header>
+                                    ) : (
+                                        <></>
+                                    )}
                                     <Card.Body>
                                         <h3>{client.name}</h3>
                                         {client.email}
