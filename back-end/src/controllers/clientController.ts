@@ -15,7 +15,8 @@ export const getClients: RequestHandler = async (req, res, next) => {
         const clients = await client.findAll({
             where: {
                 clientId: clientIds, // Assuming clientIds is an array of client IDs.
-            }
+            },
+            limit: 15,
         });
         res.status(200).json(clients)
     } else {
@@ -103,8 +104,8 @@ export const searchClient: RequestHandler = async (req, res, next) => {
                         Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), 'LIKE', `%${query.toLowerCase()}%`),
                         Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('email')), 'LIKE', `%${query.toLowerCase()}%`),
                     ]
-                }
-
+                },
+                limit: 15
             });
             res.json(searchResults);
         } else {
@@ -122,15 +123,14 @@ export const removeClient: RequestHandler = async (req, res, next) => {
         try {
             const reqRemove = req.params.id
 
-            if (usr.userId !== parseInt(reqRemove)) {
+            const clientIds: number[] = JSON.parse(usr.clientIds || '[]');
+
+            let id = clientIds.includes(parseInt(req.params.id))
+
+            if (!id) {
                 res.status(400).send()
             }
-            let removed = await client.destroy({ where: { clientId: reqRemove } })
-            if (removed) {
-                res.status(200).send(removed)
-            } else {
-                res.status(400).send()
-            }
+            await client.destroy({ where: { clientId: reqRemove } })
         } catch {
             res.status(500).send()
         }

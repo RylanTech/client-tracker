@@ -12,6 +12,7 @@ function Clients() {
     const [email, setEmail] = useState()
     const [imageUrl, setImageUrl] = useState()
     const [clients, setClients] = useState()
+    const [number, setNumber] = useState()
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -45,7 +46,8 @@ function Clients() {
         const client = {
             name: name,
             email: email,
-            imageUrl: imageUrl
+            imageUrl: imageUrl,
+            number: number
         }
         console.log(client)
         addClient(client)
@@ -177,6 +179,12 @@ function Clients() {
                                 <Form.Label>imageUrl</Form.Label>
                                 <Form.Control
                                     onChange={(e) => setImageUrl(e.target.value)}
+                                />
+                            </Form.Group>
+                            <Form.Group className="col-12">
+                                <Form.Label>Phone Number</Form.Label>
+                                <Form.Control
+                                    onChange={(e) => setNumber(e.target.value)}
                                 />
                             </Form.Group>
                         </Row>

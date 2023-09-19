@@ -5,6 +5,7 @@ import Login from './pages/Loginpage';
 import CreateAccount from './pages/CreateAccount';
 import Clients from './pages/Clients';
 import ClientsPage from './pages/Clientpage';
+import EditClient from './pages/EditClient';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Route path='/create-account' element={<CreateAccount/>}/>
       <Route path='/clients' element={<Clients/>}/>
       <Route path='/client/:id' element={<ClientsPage/>}/>
+      <Route path='/client/edit/:id' element={<EditClient/>}/>
     </Routes>
     </BrowserRouter>
   );

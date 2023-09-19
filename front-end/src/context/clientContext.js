@@ -2,8 +2,8 @@ import axios from "axios";
 import { createContext } from "react";
 
 export const ClientContext = createContext()
-// let baseUrl = "http://localhost:3001/"
-let baseUrl = "http://192.168.1.2:3001/"
+let baseUrl = "http://localhost:3001/"
+// let baseUrl = "http://192.168.1.2:3001/"
 
 export const ClientProvider = (props) => {
 
@@ -13,6 +13,17 @@ export const ClientProvider = (props) => {
         };
 
         return axios.post(baseUrl + "api/client/add-client", client, {headers: myHeaders})
+        .then(response => {
+            return new Promise(resolve => resolve(response.data))
+        })
+    }
+
+    function editClient(client) {
+        let myHeaders = {
+            Authorization: `Bearer ${localStorage.getItem('CTLogin')}`
+        };
+
+        return axios.put(baseUrl + "api/client/edit-client", client, {headers: myHeaders})
         .then(response => {
             return new Promise(resolve => resolve(response.data))
         })
@@ -40,6 +51,17 @@ export const ClientProvider = (props) => {
         })
     }
 
+    function deleteClient(id) {
+        let myHeaders = {
+            Authorization: `Bearer ${localStorage.getItem('CTLogin')}`
+        };
+
+        return axios.delete(baseUrl + `api/client/delete/${id}`, {headers: myHeaders})
+        .then(response => {
+            return new Promise(resolve => resolve(response.data))
+        })
+    }
+
     function searchClients(query) {
         let myHeaders = {
             Authorization: `Bearer ${localStorage.getItem('CTLogin')}`
@@ -57,6 +79,7 @@ export const ClientProvider = (props) => {
                 addClient,
                 getClient,
                 getClients,
+                deleteClient,
                 searchClients
             }}
         >
