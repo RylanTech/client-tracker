@@ -33,14 +33,33 @@
     background-color: rgb(235, 235, 235);
 }
 
-.clientCard {
-    position: absolute;
-    border: 1px solid black;
-    padding: 5px 10px 5px 5px;
+.clientCardSelect {
+    width: 100%;
+    border: none;
+    padding: 5px 10px 5px 5px!important;
     background-color: aliceblue;
-    border-radius: 5px;
+    border-radius: 0px!important;
+    color: black;
+    z-index: 1;
 }
 
-.clientCard:hover {
-    background-color: rgb(220, 226, 230);
+.clientCardSelect:hover {
+    background-color: rgb(209, 219, 225);
+}
+
+.clients {
+    position: absolute;
+}
+
+.projectTab {
+    text-decoration: none;
+    color: black;
+}
+
+.projectTabContent {
+    margin: 13px 15px 15px 15px;
+}
+
+.gigItem:hover {
+    background-color: aliceblue;
 }

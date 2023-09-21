@@ -3,31 +3,74 @@ import { verifyUser } from "../services/authService";
 import { client } from "../models/clients";
 import { gig } from "../models/gigs";
 
+// export const getGigs: RequestHandler = async (req, res, next) => {
+//     let usr = await verifyUser(req)
+//     if (usr) {
+//         try {
+//             let gigs = await gig.findAll({
+//                 where: { userId: usr.userId },
+//                 limit: 20,
+//                 include: [
+//                     {
+//                         model: client, // Include the client model
+//                         as: 'Client', // Use the alias you have defined for the client model
+//                     },
+//                 ],
+//             });
+
+//             // Now, each gig object in the result will have a 'Client' attribute
+//             res.status(200).send(gigs);
+//         } catch (error) {
+//             console.log(error)
+//             res.status(500).send();
+//         }
+//     } else {
+//         res.status(401).send();
+//     }
+// }
+
 export const getGigs: RequestHandler = async (req, res, next) => {
     let usr = await verifyUser(req)
     if (usr) {
         try {
-            let gigs = await gig.findAll({where: {userId: usr.userId}})
-            res.status(200).send(gigs)
+            let gigs: any = await gig.findAll({
+                where: { userId: usr.userId },
+                limit: 20,
+            });
+
+            // Iterate through the gigs and add a 'Client' attribute to each one
+            for (let i = 0; i < gigs.length; i++) {
+                const clientId = gigs[i].clientId;
+
+                // Fetch the client information based on the clientId
+                const clientInfo = await client.findByPk(clientId);
+
+                // Add the 'Client' attribute to the gig
+                gigs[i].dataValues.client = clientInfo;
+            }
+
+            res.status(200).send(gigs);
         } catch {
-            res.status(400).send()
+            res.status(400).send();
         }
     } else {
-        res.status(401).send()
+        res.status(401).send();
     }
-    
 }
+
 
 export const getGig: RequestHandler = async (req, res, next) => {
     let usr = await verifyUser(req)
     if (usr) {
         try {
             let gigs = await gig.findAll({where: {userId: usr.userId}})
-            const requestedGig = gigs.find((userGig) => userGig.gigId === parseInt(req.params.id, 10));
+            let requestedGig: any = gigs.find((userGig) => userGig.gigId === parseInt(req.params.id, 10));
 
             if (!requestedGig) {
               return res.status(404).json({ error: 'Gig not found for the user.' });
             }
+            let clint = await client.findByPk(requestedGig.clientId)
+            requestedGig.client = clint
             res.status(200).send(requestedGig)
         } catch {
             res.status(400).send()
@@ -53,8 +96,9 @@ export const addGig: RequestHandler = async (req, res, next) => {
             } else {
                 res.status(400).send()
             }
-        } catch {
-            res.status(500).send()
+        } catch (error) {
+            console.error(error);
+            res.status(500).send();
         }
     } else {
         res.status(401).send()

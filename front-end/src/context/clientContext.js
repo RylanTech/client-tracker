@@ -23,7 +23,7 @@ export const ClientProvider = (props) => {
             Authorization: `Bearer ${localStorage.getItem('CTLogin')}`
         };
 
-        return axios.put(baseUrl + "api/client/edit-client", client, {headers: myHeaders})
+        return axios.put(baseUrl + `api/client/edit-client/${client.clientId}`, client, {headers: myHeaders})
         .then(response => {
             return new Promise(resolve => resolve(response.data))
         })
@@ -79,8 +79,9 @@ export const ClientProvider = (props) => {
                 addClient,
                 getClient,
                 getClients,
+                editClient,
                 deleteClient,
-                searchClients
+                searchClients,
             }}
         >
             {props.children}

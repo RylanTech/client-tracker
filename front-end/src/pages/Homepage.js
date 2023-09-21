@@ -2,35 +2,34 @@ import { Button, Card, Container, Form, Modal, Row } from "react-bootstrap"
 import NavigationBar from "../components/NavigationBar"
 import { useContext, useEffect, useState } from "react";
 import { ClientContext } from "../context/clientContext";
+import { GigContext } from "../context/gigContext";
 import { Link } from "react-router-dom";
 
 function Homepage() {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-    const [query, setQuery] = useState()
     const [show, setShow] = useState(false);
-    const [gigId, setGigId] = useState()
-    const [userId, setUserId] = useState()
     const [clientId, setClientId] = useState()
-    const [gigValue, setGigValue]= useState()
-    const [gigCost, setGigCost] = useState()
-    const [gigFeatures, setGigFeatures] = useState()
-    const [gigTimeSpent, setGigTimeSpent] = useState()
+    const [features, setFeatures] = useState([{ name: '' }]);
     const [gigName, setGigName] = useState()
     const [gigs, setGigs] = useState()
     const [clients, setClients] = useState()
+    const [isBtnDisabled, setIsBtnDisabled] = useState(true)
+    const [nameSearch, setNameSearch] = useState()
+    const [cliArr, setClientArr] = useState()
+
+    const { getClients, searchClients } = useContext(ClientContext)
+    const { addGig, getGigs } = useContext(GigContext)
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const { getClients, searchClients } = useContext(ClientContext)
-
-    // useEffect(() => {
-    //     async function getCli() {
-    //         const cli = await getClients()
-    //         setClients(cli)
-    //     }
-    //     getCli()
-    // }, [])
+    useEffect(() => {
+        async function gettingGigs() {
+            let ggs = await getGigs()
+            setGigs(ggs)
+        }
+        gettingGigs()
+    }, [])
 
     useEffect(() => {
 
@@ -47,14 +46,28 @@ function Homepage() {
         };
     }, []);
 
+    const handleAddFeature = () => {
+        setFeatures([...features, { name: '' }]);
+    };
+
+    const handleRemoveFeature = (index) => {
+        const updatedFeatures = [...features];
+        updatedFeatures.splice(index, 1);
+        setFeatures(updatedFeatures);
+    };
+
+
     function addaGig() {
-        // const client = {
-        //     name: name,
-        //     email: email,
-        //     imageUrl: imageUrl,
-        //     number: number
-        // }
-        // addClient(client)
+
+        const gig = {
+            gigFeatures: features,
+            gigName: gigName,
+            clientId: clientId,
+            gigCost: 0,
+            gigValue: 0,
+            gigTimeSpent: 0,
+        }
+        addGig(gig)
     }
 
     async function search(value) {
@@ -81,34 +94,91 @@ function Homepage() {
             let cli = await searchClients(value)
             setClients(cli)
         }
+        SelectAClient()
     }
+
+    const handleFeatureChange = (index, newName) => {
+        const updatedFeatures = [...features];
+        updatedFeatures[index].name = newName;
+        updatedFeatures[index].completed = false;
+        setFeatures(updatedFeatures);
+    };
+
+    const renderFormGroups = () => {
+        return features.map((feature, index) => (
+            <>
+                <Form.Group key={index}>
+                    <Container>
+                        <Row>
+                            <Form.Label className="col-12">Feature {index + 1}</Form.Label>
+                            <div className="col-9">
+                                <Form.Control
+                                    type="text"
+                                    value={feature.name}
+                                    onChange={(e) => handleFeatureChange(index, e.target.value)}
+                                />
+                                <br />
+                            </div>
+                            <div className="col-3">
+                                <Button variant="danger" onClick={() => handleRemoveFeature(index)}>
+                                    Remove
+                                </Button>
+                            </div>
+                        </Row>
+                    </Container>
+                </Form.Group>
+            </>
+        ));
+    };
 
     function mapGigs() {
         if (gigs) {
-            return gigs.map((gig) => {
-                
+
+            return gigs.map((gig, index) => {
                 return (
                     <>
-                        <div className="gigItem col-12">
-                            <h5>{gig.name}</h5>
-                        </div>
+                        <Link className="projectTab">
+                            <div key={index} className="gigItem col-12">
+                                <Row>
+                                    <div className="projectTabContent">
+                                        <Row>
+                                        <h5 className="col-4">{gig.gigName}</h5>
+                                    <div className="col-4">
+                                        Total Costs: ${gig.gigCost}
+                                    </div>
+                                    <div className="col-4">
+                                        Client: {gig.client.name}
+                                    </div>
+                                        </Row>
+                                    </div>
+                                </Row>
+                            </div>
+                        </Link>
                     </>
                 )
             })
         }
     }
 
+
     function SelectAClient() {
         if (clients) {
-            return clients.map((client) => {
-                return (
-                    <>
-                    <div className="col-5 clientCard">
+            let cliArray = clients.map((client) => (
+                <div key={client.clientId}>
+                    <Button
+                        onClick={() => {
+                            setClientId(client.clientId);
+                            setIsBtnDisabled(false)
+                            setNameSearch(client.name)
+                            setClientArr(null)
+                        }}
+                        className="col-5 clientCardSelect"
+                    >
                         {client.name}
-                    </div>
-                    </>
-                )
-            })
+                    </Button>
+                </div>
+            ));
+            setClientArr(cliArray)
         }
     }
 
@@ -118,12 +188,14 @@ function Homepage() {
             return (
                 <div className="col-12 col-lg-4">
                     <Row>
-                        <Button
-                            className="col-4 col-lg-12"
-                            onClick={() => setShow(true)}
-                        >
-                            New Project
-                        </Button>
+                        <div className="col-4">
+                            <Button
+                                className="col-12"
+                                onClick={() => setShow(true)}
+                            >
+                                New Project
+                            </Button>
+                        </div>
                         <div className="col-8">
                             <Form.Control
                                 placeholder="Search for a Project"
@@ -183,10 +255,21 @@ function Homepage() {
                             <Form.Group className="col-6">
                                 <Form.Label>Client</Form.Label>
                                 <Form.Control
-                                    onChange={(e) => searchClient(e.target.value)}
+                                    onChange={(e) => {
+                                        searchClient(e.target.value)
+                                        setNameSearch(e.target.value)
+                                    }}
+                                    value={nameSearch}
                                 />
-                                {SelectAClient()}
+                                <div className="clients col-5">
+                                    {cliArr}
+                                </div>
                             </Form.Group>
+                            {renderFormGroups()}
+                            <br /><br /><br /><br />
+                            <div className="col-6">
+                                <Button className="col-12" onClick={handleAddFeature}>Add Feature</Button>
+                            </div>
                         </Row>
                     </Container>
                 </Modal.Body>
@@ -195,6 +278,7 @@ function Homepage() {
                         Close
                     </Button>
                     <Button
+                        disabled={isBtnDisabled}
                         variant="primary"
                         onClick={async () => {
                             addaGig()

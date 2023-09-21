@@ -117,6 +117,47 @@ export const searchClient: RequestHandler = async (req, res, next) => {
     }
 }
 
+export const editClient: RequestHandler = async (req, res, next) => {
+    try {
+        let usr: user | null = await verifyUser(req);
+        if (!usr) {
+            return res.status(403).send();
+        }
+
+        let clientId = req.params.id;
+        let editedClientData: client = req.body;
+
+        // If location is an object, stringify it
+
+        let MatchingClient = await client.findByPk(clientId);
+
+        // Make sure the same user who created it is editing
+        let userId = req.body.userId;
+
+        let userFound = await user.findByPk(userId);
+        if (!userFound || userFound.userId !== usr.userId) {
+            return res.status(403).send("Not the same user");
+        }
+
+
+        if (
+            MatchingClient &&
+            MatchingClient.userId &&
+            MatchingClient.email &&
+            MatchingClient.name
+        ) {
+            if (MatchingClient.userId === editedClientData.userId) {
+                await client.update(editedClientData, { where: { clientId: clientId } });
+                return res.status(200).send("client edited");
+            } else {
+                return res.status(400).json();
+            }
+        }
+    } catch (error: any) {
+        res.status(500).send(error.message || "Some error occurred while editing the client.");
+    }
+};
+
 export const removeClient: RequestHandler = async (req, res, next) => {
     let usr = await verifyUser(req)
     if (usr) {

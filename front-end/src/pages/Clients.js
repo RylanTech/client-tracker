@@ -108,12 +108,14 @@ function Clients() {
             return (
                 <div className="col-12 col-lg-4">
                     <Row>
+                        <div className="col-4">
                         <Button
-                            className="col-4 col-lg-12"
+                            className="col-12"
                             onClick={() => setShow(true)}
                         >
                             New Client
                         </Button>
+                        </div>
                         <div className="col-8">
                             <Form.Control
                                 placeholder="Search for a Client"
@@ -199,7 +201,6 @@ function Clients() {
                         variant="primary"
                         onClick={async () => {
                             addaClient()
-                            handleClose()
                             window.location.reload()
                         }}
                     >

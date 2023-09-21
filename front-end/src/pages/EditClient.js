@@ -15,7 +15,7 @@ function EditClient() {
     let clientId = params.id
     const navigate = useNavigate()
 
-    const { getClient, EditClient, deleteClient } = useContext(ClientContext)
+    const { getClient, editClient, deleteClient } = useContext(ClientContext)
 
     useEffect(() => {
         async function gettingClient() {
@@ -31,25 +31,31 @@ function EditClient() {
 
     function submit() {
         const cli = {
+            clientValue: client.clientValue,
+            clientId: client.clientId,
+            userId: client.userId,
             name: name,
             email: email,
             imageUrl: imageUrl,
             number: number
         }
-        EditClient(cli)
+        if (cli.imageUrl === "") {
+            cli.imageUrl = null
+        }
+
+        editClient(cli)
         navigate(`/client/${clientId}`)
     }
 
-    function removeClient() {
-        deleteClient(clientId)
-        navigate(`/clients/`)
+    async function removeClient() {
+        let i = deleteClient(clientId)
+        if (i) {
+            navigate(`/clients/`)
+        }
     }
 
     function clientInfo() {
         if (client) {
-            if (!client.imageUrl) {
-                client.imageUrl = "https://cse.umn.edu/sites/cse.umn.edu/themes/custom/cse/img/person_placeholder.png"
-            }
             return (
                 <>
                     <div className="clientCard">
@@ -57,9 +63,15 @@ function EditClient() {
                             <div className="col-lg-2" />
                             <div className="col-6 col-lg-4">
                             <Row>
-                            <img className=" clientImg"
+                            {client.imageUrl ? (
+                                <img className=" clientImg"
                                 src={client.imageUrl}
+                                />
+                            ) : (
+                                <img className=" clientImg"
+                                src="https://cse.umn.edu/sites/cse.umn.edu/themes/custom/cse/img/person_placeholder.png"
                             />
+                            )}
                             </Row>
                             </div>
                             <div className="col-6">
@@ -67,18 +79,22 @@ function EditClient() {
                                     <Form.Label>Name</Form.Label>
                                     <Form.Control
                                         value={name}
+                                        onChange={(e) => setName(e.target.value)}
                                     />
                                     <Form.Label>Email</Form.Label>
                                     <Form.Control
                                         value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
                                     />
                                     <Form.Label>Number</Form.Label>
                                     <Form.Control
                                         value={number}
+                                        onChange={(e) => setNumber(e.target.value)}
                                     />
                                     <Form.Label>ImageUrl</Form.Label>
                                     <Form.Control
                                         value={imageUrl}
+                                        onChange={(e) => setImageUrl(e.target.value)}
                                     />
                                 </Form.Group>
                                 <br/>

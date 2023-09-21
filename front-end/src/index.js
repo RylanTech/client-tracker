@@ -5,14 +5,17 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './index.css'
 import { UserProvider } from './context/userContext';
 import { ClientContext, ClientProvider } from './context/clientContext';
+import { GigProvider } from './context/gigContext';
 
 ReactDOM.render(
   <React.StrictMode>
-    <ClientProvider>
-      <UserProvider>
-        <App />
-      </UserProvider>
-    </ClientProvider>
+    <GigProvider>
+      <ClientProvider>
+        <UserProvider>
+          <App />
+        </UserProvider>
+      </ClientProvider>
+    </GigProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
