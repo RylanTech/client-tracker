@@ -64,13 +64,14 @@ export const getGig: RequestHandler = async (req, res, next) => {
     if (usr) {
         try {
             let gigs = await gig.findAll({where: {userId: usr.userId}})
-            let requestedGig: any = gigs.find((userGig) => userGig.gigId === parseInt(req.params.id, 10));
+            let requestedGig: any = gigs.find((userGig) => userGig.gigId === parseInt(req.params.id));
 
             if (!requestedGig) {
               return res.status(404).json({ error: 'Gig not found for the user.' });
             }
             let clint = await client.findByPk(requestedGig.clientId)
-            requestedGig.client = clint
+            requestedGig.dataValues.client = clint
+            console.log(requestedGig)
             res.status(200).send(requestedGig)
         } catch {
             res.status(400).send()

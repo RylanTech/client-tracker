@@ -30,10 +30,10 @@ function ClientsPage() {
                     <div className="clientCard">
                         <Row>
                             <div className="col-lg-2" />
-                            <img className="col-6 col-lg-4 clientImg"
+                            <img className="col-12 col-md-6 col-lg-4 clientImg"
                                 src={client.imageUrl}
                             />
-                            <div className="col-6">
+                            <div className="col-12 col-md-6">
                                 <h2>
                                     {client.name}
                                 </h2>

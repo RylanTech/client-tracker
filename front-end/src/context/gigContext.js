@@ -18,6 +18,17 @@ export const GigProvider = (props) => {
         })
     }
 
+    function getGig(id) {
+        let myHeaders = {
+            Authorization: `Bearer ${localStorage.getItem('CTLogin')}`
+        };
+
+        return axios.get(baseUrl + `api/gig/${id}`, {headers: myHeaders})
+        .then(response => {
+            return new Promise(resolve => resolve(response.data))
+        })
+    }
+
     function getGigs() {
         let myHeaders = {
             Authorization: `Bearer ${localStorage.getItem('CTLogin')}`
@@ -33,6 +44,7 @@ export const GigProvider = (props) => {
         <GigContext.Provider
             value={{
                 addGig,
+                getGig,
                 getGigs
             }}
         >

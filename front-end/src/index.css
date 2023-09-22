@@ -1,6 +1,6 @@
 .clientImg {
-    border-radius: 40px;
-    aspect-ratio: 4/5;
+    border-radius: 50%;
+    /* aspect-ratio: 4/5; */
 }
 .personLink {
     text-decoration: none;
@@ -63,3 +63,13 @@
 .gigItem:hover {
     background-color: aliceblue;
 }
+
+.features {
+    border: 1px solid black;
+    padding: 15px;
+    border-radius: 15px;
+}
+
+/* .isComplete {
+
+} */

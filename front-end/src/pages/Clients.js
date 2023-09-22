@@ -74,23 +74,10 @@ function Clients() {
                         <div className="col-12 col-sm-6">
                             <Link className="personLink" to={`/client/${client.clientId}`}>
                                 <Card>
-                                    {client.imageUrl ? (
-                                        <Card.Header>
-                                        <Row>
-                                            <center>
-                                                <img
-                                                    className="col-8 clientImg"
-                                                    src={client.imageUrl}
-                                                />
-                                            </center>
-                                        </Row>
-                                    </Card.Header>
-                                    ) : (
-                                        <></>
-                                    )}
                                     <Card.Body>
                                         <h3>{client.name}</h3>
                                         {client.email}
+                                        <br/>
                                     </Card.Body>
                                 </Card>
                             </Link>

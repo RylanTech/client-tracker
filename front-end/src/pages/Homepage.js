@@ -137,18 +137,21 @@ function Homepage() {
             return gigs.map((gig, index) => {
                 return (
                     <>
-                        <Link className="projectTab">
+                        <Link 
+                        className="projectTab"
+                        to={`/project/${gig.gigId}`}
+                        >
                             <div key={index} className="gigItem col-12">
                                 <Row>
                                     <div className="projectTabContent">
                                         <Row>
-                                        <h5 className="col-4">{gig.gigName}</h5>
-                                    <div className="col-4">
-                                        Total Costs: ${gig.gigCost}
-                                    </div>
-                                    <div className="col-4">
-                                        Client: {gig.client.name}
-                                    </div>
+                                            <h5 className="col-4">{gig.gigName}</h5>
+                                            <div className="col-4">
+                                                Total Costs: ${gig.gigCost}
+                                            </div>
+                                            <div className="col-4">
+                                                Client: {gig.client.name}
+                                            </div>
                                         </Row>
                                     </div>
                                 </Row>
